@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, PostView, Tag, User
+from .models import Post, PostView, Tag
 
 class PostAdmin(admin.ModelAdmin):
     pass
@@ -12,9 +12,7 @@ admin.site.register(Tag, PostTagAdmin)
 
 
 class PostViewAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['post','viewed_at', 'user']    
+
 admin.site.register(PostView, PostViewAdmin)
 
-class UserViewAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(User, UserViewAdmin)

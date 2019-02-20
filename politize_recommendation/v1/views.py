@@ -2,9 +2,10 @@ from rest_framework import routers, serializers, viewsets
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.models import User
+from rest_framework.decorators import list_route
 
-
-from .models import Post, Tag, PostView, User
+from .models import Post, Tag, PostView
 from .serializers import PostSerializer, TagSerializer
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -14,27 +15,26 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-
-    
-
-    def list(self, request):        
+    @list_route(methods=['get'])
+    def news(self, request):
         #TODO insert filter to post visited and suggested
-        print('Passando novamente...')
-        queryset = Post.objects.all()
+        postHistory = [post.id for post in PostView.objects.filter(user_id = request.user.id)]
+        
+        queryset = Post.objects.all().exclude(pk__in=postHistory)
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 
+
+    def list(self, request):                       
+        serializer = PostSerializer(self.queryset, many=True)
+        return Response(serializer.data)
+
     def retrieve(self, request, pk=None):
-        
-        user = User()
-        user.user_id = request.user.id
-        user.post_id = pk
-        user.save()
 
         post = Post.objects.get(pk=pk)        
         postView = PostView()
         postView.post = post
-        postView.user = user
+        postView.user = request.user
         postView.save()        
 
         serializer = PostSerializer(post)

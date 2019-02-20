@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class Post(models.Model):
     tags = models.ManyToManyField(
@@ -35,27 +35,32 @@ class Tag(models.Model):
 
 
 class PostView(models.Model):
+    user = models.ForeignKey(
+        User, 
+        on_delete=models.CASCADE,
+        related_name='post_views')
+
     post = models.ForeignKey(
         to='v1.Post',
         on_delete=models.CASCADE,
         related_name='post_views',
-    )
-    user = models.ForeignKey(
-        to='v1.User',
-        on_delete=models.CASCADE,
-        related_name='post_views',
-    )
+    )    
     viewed_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="visualizado em",
     )
 
     def __str__(self):
-        return self.post
+        return '{0}-{1}'.format(self.post, self.viewed_at)
 
-class User(models.Model):
-    views = models.ManyToManyField(
-        to='v1.Post',
-        through='v1.PostView',
-        related_name='user_views',
-    )  
+
+# class User(models.Model):
+#     views = models.ManyToManyField(
+#         to='v1.Post',
+#         through='v1.PostView',
+#         related_name='user_views',
+#     )  
+
+
+
+    
