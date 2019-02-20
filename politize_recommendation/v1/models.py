@@ -58,7 +58,4 @@ class User(models.Model):
         to='v1.Post',
         through='v1.PostView',
         related_name='user_views',
-    )
-
-    def __str__(self):
-        return self.name
+    )  

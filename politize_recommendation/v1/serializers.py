@@ -1,13 +1,15 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 from .models import Post, Tag
 
 # Serializers define the API representation.
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.ModelSerializer):   
+
     class Meta:
         model = Post
-        fields = ('name',)
+        fields = ('name', 'tags' )
 
-class TagSerializer(serializers.HyperlinkedModelSerializer):
+class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ('name',)
