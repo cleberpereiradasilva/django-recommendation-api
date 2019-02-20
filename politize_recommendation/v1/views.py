@@ -17,15 +17,19 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @list_route(methods=['get'])
     def news(self, request):        
+        queryset = Post.objects.all()
         visitedPosts = PostView.objects.filter(user_id = request.user.id)
-        visitedIds = [visited.post_id for visited in visitedPosts]
-        visitedTagsPosts = [post.post.tags.all() for post in visitedPosts]     
+        if len(visitedPosts): #try get from another users
+            visitedPosts = PostView.objects.all()
 
-        visitedTagIds = []
-        for visitedTag in visitedTagsPosts:        
-            visitedTagIds += [tag.id for tag in visitedTag]
-
-        queryset = Post.objects.all().exclude(pk__in=visitedIds).filter(tags__id__in=visitedTagIds)
+        if len(visitedPosts) > 0:
+            visitedIds = [visited.post_id for visited in visitedPosts]
+            visitedTagsPosts = [post.post.tags.all() for post in visitedPosts]     
+            visitedTagIds = []
+            for visitedTag in visitedTagsPosts:        
+                visitedTagIds += [tag.id for tag in visitedTag]
+            queryset = queryset.exclude(pk__in=visitedIds).filter(tags__id__in=visitedTagIds)
+                
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 
