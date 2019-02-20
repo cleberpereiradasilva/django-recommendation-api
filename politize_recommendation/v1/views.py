@@ -18,9 +18,19 @@ class PostViewSet(viewsets.ModelViewSet):
     @list_route(methods=['get'])
     def news(self, request):
         #TODO insert filter to post visited and suggested
-        postHistory = [post.id for post in PostView.objects.filter(user_id = request.user.id)]
+        visitedPosts = PostView.objects.filter(user_id = request.user.id)
+        visitedIds = [visited.post_id for visited in visitedPosts]
+
+        visitedTagsPosts = [post.post.tags.all() for post in visitedPosts]
+      
+
+        visitedTagIds = []
+        for visitedTag in visitedTagsPosts:        
+            visitedTagIds += [tag.id for tag in visitedTag]
         
-        queryset = Post.objects.all().exclude(pk__in=postHistory)
+        
+        
+        queryset = Post.objects.all().exclude(pk__in=visitedIds).filter(tags__id__in=visitedTagIds)
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 
