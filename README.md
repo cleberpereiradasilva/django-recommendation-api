@@ -1,6 +1,11 @@
 # Politize Recommendation Api
 
-- [ ] Authentication
-- [ ] Crete POST
-- [ ] Get recomendations
+- [x] Authentication
+- [x] Create POST
+- [x] Create TAGS
+- [x] Get recomendations
+
+# End points
+
+
 

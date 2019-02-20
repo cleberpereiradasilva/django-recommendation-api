@@ -20,7 +20,6 @@ class Post(models.Model):
         verbose_name="última modificação"
     )
 
-
     def __str__(self):
         return self.name
 

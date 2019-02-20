@@ -16,20 +16,15 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
     @list_route(methods=['get'])
-    def news(self, request):
-        #TODO insert filter to post visited and suggested
+    def news(self, request):        
         visitedPosts = PostView.objects.filter(user_id = request.user.id)
         visitedIds = [visited.post_id for visited in visitedPosts]
-
-        visitedTagsPosts = [post.post.tags.all() for post in visitedPosts]
-      
+        visitedTagsPosts = [post.post.tags.all() for post in visitedPosts]     
 
         visitedTagIds = []
         for visitedTag in visitedTagsPosts:        
             visitedTagIds += [tag.id for tag in visitedTag]
-        
-        
-        
+
         queryset = Post.objects.all().exclude(pk__in=visitedIds).filter(tags__id__in=visitedTagIds)
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
@@ -49,7 +44,6 @@ class PostViewSet(viewsets.ModelViewSet):
 
         serializer = PostSerializer(post)
         return Response(serializer.data)
-
 
 
 class TagViewSet(viewsets.ModelViewSet):

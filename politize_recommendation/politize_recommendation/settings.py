@@ -77,24 +77,13 @@ WSGI_APPLICATION = 'politize_recommendation.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# os.environ.setdefault('DATABASE_URL', f'postgres://postgres@localhost:5432/politize_recommendation')
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         env='DATABASE_URL',
-#         conn_max_age=60,
-#     ),
-# }
-
+os.environ.setdefault('DATABASE_URL', 'postgres://postgres@localhost:5432/politize_recommendation')
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'politize_recommendation',        
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',        
-    }
+    'default': dj_database_url.config(
+        env='DATABASE_URL',
+        conn_max_age=60,
+    ),
 }
-
 
 # https://www.django-rest-framework.org/api-guide/authentication/
 REST_FRAMEWORK = {
