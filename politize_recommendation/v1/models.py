@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Post(models.Model):
     tags = models.ManyToManyField(
         to='v1.Tag',
@@ -60,7 +61,5 @@ class PostView(models.Model):
 #         through='v1.PostView',
 #         related_name='user_views',
 #     )  
-
-
 
     
