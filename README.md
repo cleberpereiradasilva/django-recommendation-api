@@ -1,1 +1,6 @@
-politize-recommendation-api
+# Politize Recommendation Api
+
+- [ ] Authentication
+- [ ] Crete POST
+- [ ] Get recomendations
+
