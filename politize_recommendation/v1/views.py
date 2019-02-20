@@ -3,7 +3,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Post, Tag, PostView, User as Visitor
+
+from .models import Post, Tag, PostView, User
 from .serializers import PostSerializer, TagSerializer
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -13,6 +14,9 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+
+    
+
     def list(self, request):        
         #TODO insert filter to post visited and suggested
         print('Passando novamente...')
@@ -20,13 +24,20 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self, request, pk=None):        
-        visitor = Visitor()
-        visitor.post_id = pk
-        visitor.user_id = request.user.id
-        visitor.save()
-        queryset = Post.objects.get(pk=pk)
-        serializer = PostSerializer(queryset)
+    def retrieve(self, request, pk=None):
+        
+        user = User()
+        user.user_id = request.user.id
+        user.post_id = pk
+        user.save()
+
+        post = Post.objects.get(pk=pk)        
+        postView = PostView()
+        postView.post = post
+        postView.user = user
+        postView.save()        
+
+        serializer = PostSerializer(post)
         return Response(serializer.data)
 
 

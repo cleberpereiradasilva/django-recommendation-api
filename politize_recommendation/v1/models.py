@@ -51,7 +51,7 @@ class PostView(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.post
 
 class User(models.Model):
     views = models.ManyToManyField(
