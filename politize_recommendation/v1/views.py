@@ -30,9 +30,7 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-    def list(self, request):                       
-        serializer = PostSerializer(self.queryset, many=True)
-        return Response(serializer.data)
+   
 
     def retrieve(self, request, pk=None):
 
