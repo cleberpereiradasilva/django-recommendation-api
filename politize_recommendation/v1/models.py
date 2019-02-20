@@ -20,12 +20,18 @@ class Post(models.Model):
         verbose_name="última modificação"
     )
 
+    def __str__(self):
+        return self.name
+
 
 class Tag(models.Model):
     name = models.CharField(
         max_length=100,
         verbose_name="nome",
     )
+
+    def __str__(self):
+        return self.name
 
 
 class PostView(models.Model):
@@ -44,6 +50,8 @@ class PostView(models.Model):
         verbose_name="visualizado em",
     )
 
+    def __str__(self):
+        return self.name
 
 class User(models.Model):
     views = models.ManyToManyField(
@@ -51,3 +59,6 @@ class User(models.Model):
         through='v1.PostView',
         related_name='user_views',
     )
+
+    def __str__(self):
+        return self.name
