@@ -27,7 +27,6 @@ class PostViewSet(viewsets.ModelViewSet):
 
         queryset = Post.objects.all().exclude(pk__in=visitedIds).filter(tags__id__in=visitedTagIds)
         serializer = PostSerializer(queryset, many=True)
-        print(len(serializer))
         return Response(serializer.data)
 
 
